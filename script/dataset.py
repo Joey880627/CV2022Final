@@ -47,7 +47,7 @@ class PupilDataset(Dataset):
         image = np.asarray(Image.open(self.images[item]).convert('RGB'))
         label = np.asarray(Image.open(self.labels[item]).convert('RGB'))
 
-        label = (label[..., 0] > 0).astype(np.int64)
+        label = (label.sum(axis=-1) > 0).astype(np.int64)
         # label = np.expand_dims(label, 0)
         label_validity = float(np.sum(label.flatten()) > 0)
         image = self.transform(image)
