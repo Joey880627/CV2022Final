@@ -15,7 +15,7 @@ valid_subjects = ['S2']
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 batch_size = 8
 lr = 0.001
-epochs = 50
+epochs = 3
 
 if __name__ == "__main__":
     train_dataset = get_dataset(dataset_path, train_subjects)

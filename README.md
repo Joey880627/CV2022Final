@@ -25,15 +25,15 @@ python3 main.py
 3. Add CV preprocessed mask into input
 
 ## Files
-- ***script/main.py***
+- ***script/main.py:***
 	Training segmentation model
-- ***script/dataset.py***
+- ***script/dataset.py:***
 	Wrapping customized PyTorch dataset
-- ***script/model.py***
+- ***script/model.py:***
 	Get model from segmentation_models_pytorch
-- ***script/loss.py***
+- ***script/loss.py:***
 	Implement 2D cross entropy loss
-- ***script/predict.py***
+- ***script/predict.py:***
 	Predict function for eval.py
-- ***script/model1.pth***
+- ***script/model1.pth:***
 	Model weights trained by S1 data
