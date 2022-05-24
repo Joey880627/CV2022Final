@@ -14,10 +14,10 @@ python3 main.py
 ```
 
 ## Current results
-- **model1.pth**
-	Overall weighted IoU: 0.7649
-	Average true negative rate: 0.8996
-	Benchmark score: 0.8053
++ **model1.pth**
+	+ Overall weighted IoU: 0.7649
+	+ Average true negative rate: 0.8996
+	+ Benchmark score: 0.8053
 
 ## TODO
 1. Let the model predict confidence score
@@ -25,15 +25,15 @@ python3 main.py
 3. Add CV preprocessed mask into input
 
 ## Files
-- ***script/main.py:***
-	Training segmentation model
-- ***script/dataset.py:***
-	Wrapping customized PyTorch dataset
-- ***script/model.py:***
-	Get model from segmentation_models_pytorch
-- ***script/loss.py:***
-	Implement 2D cross entropy loss
-- ***script/predict.py:***
-	Predict function for eval.py
-- ***script/model1.pth:***
-	Model weights trained by S1 data
++ ***script/main.py***
+	+ Training segmentation model
++ ***script/dataset.py***
+	+ Wrapping customized PyTorch dataset
++ ***script/model.py***
+	+ Get model from segmentation_models_pytorch
++ ***script/loss.py***
+	+ Implement 2D cross entropy loss
++ ***script/predict.py***
+	+ Predict function for eval.py
++ ***script/model1.pth***
+	+ Model weights trained by S1 data
