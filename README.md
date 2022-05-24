@@ -19,6 +19,10 @@ python3 main.py
 	+ Overall weighted IoU: 0.7649
 	+ Average true negative rate: 0.8996
 	+ Benchmark score: 0.8053
++ **model4.pth**
+	+ Overall weighted IoU: 0.7756
+	+ Average true negative rate: 0.8841
+	+ Benchmark score: 0.8082
 + **model12.pth**
 	+ Overall weighted IoU: 0.7745
 	+ Average true negative rate: 0.9966
@@ -41,7 +45,7 @@ python3 main.py
 + ***script/model.py***
 	+ Get model from segmentation_models_pytorch
 + ***script/loss.py***
-	+ Implement 2D cross entropy loss
+	+ Implement loss functions and evaluation metrics
 + ***script/predict.py***
 	+ Predict function for eval.py
 + ***script/modelXYZ.pth***

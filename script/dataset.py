@@ -42,9 +42,10 @@ class PupilDataset(Dataset):
         self.mode = mode
         self.transform = transforms.Compose([
                         transforms.ToTensor(),
-                        transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]),])
+                        transforms.Normalize([0.5], [0.5]),])
     def __getitem__(self, item):
-        image = np.asarray(Image.open(self.images[item]).convert('RGB'))
+        image = np.asarray(Image.open(self.images[item]))
+        image = np.expand_dims(image, 2)
         label = np.asarray(Image.open(self.labels[item]).convert('RGB'))
 
         label = (label.sum(axis=-1) > 0).astype(np.int64)

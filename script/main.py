@@ -7,15 +7,21 @@ from torch.utils.data import Dataset, DataLoader
 
 from dataset import get_dataset
 from model import get_model
-from loss import cross_entropy2d
+from loss import *
 
 dataset_path = '../dataset/public'
-train_subjects = ['S1', 'S4']
-valid_subjects = ['S3']
+train_subjects = ['S1']
+valid_subjects = ['S4']
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 batch_size = 8
 lr = 0.001
 epochs = 3
+loss_type = "ce" # ("ce", "weighted_ce", "dice")
+
+seed = 0
+np.random.seed(seed)
+torch.manual_seed(seed)
+torch.cuda.manual_seed_all(seed)  
 
 if __name__ == "__main__":
     train_dataset = get_dataset(dataset_path, train_subjects)
@@ -26,10 +32,11 @@ if __name__ == "__main__":
     model = get_model().to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
-    best_valid_acc = 0.0
+    best_valid_iou = 0.0
     for epoch in range(epochs):
         train_loss = 0.0
         train_acc = 0.0
+        train_iou = 0.0
         train_total = 0.0
         model.train()
         for step, (image, label, label_validity) in enumerate(train_loader):
@@ -40,42 +47,60 @@ if __name__ == "__main__":
 
             out = model(image)
             optimizer.zero_grad()
-            loss = cross_entropy2d(out, label)
+            if loss_type == "ce":
+                loss = cross_entropy2d(out, label)
+            elif loss_type == "weighted_ce":
+                loss = cross_entropy2d(out, label, weight=torch.Tensor([1, 10]))
+            elif loss_type == "dice":
+                loss = dice_loss(out, label)
             loss.backward()
             optimizer.step()
             _, pred = torch.max(out.data, 1)
             acc = pred.eq(label.data).cpu().sum() / np.prod(label.shape)
+            iou = binary_iou(pred, label)
             train_loss += loss.item() * bsz
             train_acc += acc.item() * bsz
+            train_iou += iou.item() * bsz
             train_total += bsz
-            print(f"Epoch ({epoch}/{epochs}) Step ({step}/{len(train_loader)})  Train loss: {loss.item()}  Train acc: {acc.item()}")
+            print(f"Epoch ({epoch+1}/{epochs}) Step ({step+1}/{len(train_loader)})  Train loss: {loss.item()}  Train acc: {acc.item()}  Train iou: {iou.item()}", end='\r')
         
         valid_loss = 0.0
         valid_acc = 0.0
+        valid_iou = 0.0
         valid_total = 0.0
         model.eval()
-        for step, (image, label, label_validity) in enumerate(valid_loader):
-            image = image.to(device)
-            label = label.to(device)
-            label_validity = label_validity.to(device)
-            bsz = image.shape[0]
+        with torch.no_grad():
+            for step, (image, label, label_validity) in enumerate(valid_loader):
+                image = image.to(device)
+                label = label.to(device)
+                label_validity = label_validity.to(device)
+                bsz = image.shape[0]
 
-            out = model(image)
-            loss = cross_entropy2d(out, label)
-            _, pred = torch.max(out.data, 1)
-            acc = pred.eq(label.data).cpu().sum() / np.prod(label.shape)
-            valid_loss += loss.item() * bsz
-            valid_acc += acc.item() * bsz
-            valid_total += bsz
-            print(f"Epoch ({epoch}/{epochs}) Step ({step}/{len(valid_loader)})  Valid loss: {loss.item()}  Valid acc: {acc.item()}")
+                out = model(image)
+                if loss_type == "ce":
+                    loss = cross_entropy2d(out, label)
+                elif loss_type == "weighted_ce":
+                    loss = cross_entropy2d(out, label, weight=torch.Tensor([1, 10]))
+                elif loss_type == "dice":
+                    loss = dice_loss(out, label)
+                _, pred = torch.max(out.data, 1)
+                acc = pred.eq(label.data).cpu().sum() / np.prod(label.shape)
+                iou = binary_iou(pred, label)
+                valid_loss += loss.item() * bsz
+                valid_acc += acc.item() * bsz
+                valid_iou += iou.item() * bsz
+                valid_total += bsz
+                print(f"Epoch ({epoch+1}/{epochs}) Step ({step+1}/{len(valid_loader)})  Valid loss: {loss.item()}  Valid acc: {acc.item()}  Valid iou: {iou.item()}", end='\r')
 
 
         train_loss = train_loss / train_total
         train_acc = train_acc / train_total
+        train_iou = train_iou / train_total
         valid_loss = valid_loss / valid_total
         valid_acc = valid_acc / valid_total
-        print(f"Epoch {epoch}/{epochs}  Train loss: {train_loss}  Train acc: {train_acc}  Valid loss: {valid_loss}  Valid acc: {valid_acc}")
-        if valid_acc > best_valid_acc:
-            best_valid_acc = valid_acc
+        valid_iou = valid_iou / valid_total
+        print(f"Epoch ({epoch+1}/{epochs})  Train loss: {train_loss}  Train acc: {train_acc}  Train iou: {train_iou}  Valid loss: {valid_loss}  Valid acc: {valid_acc}  Valid iou: {valid_iou}")
+        if valid_iou > best_valid_iou:
+            best_valid_iou = valid_iou
             print("Saving model")
-            torch.save(model.state_dict(), "model14.pth")
+            torch.save(model.state_dict(), "model1.pth")
