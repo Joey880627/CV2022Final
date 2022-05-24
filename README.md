@@ -13,6 +13,17 @@ python3 eval.py
 python3 main.py
 ```
 
+## Current results
+- **model1.pth**
+	Overall weighted IoU: 0.7649
+	Average true negative rate: 0.8996
+	Benchmark score: 0.8053
+
+## TODO
+1. Let the model predict confidence score
+2. Deal with imbalance data (e.g. focal loss, dice loss, etc.)
+3. Add CV preprocessed mask into input
+
 ## Files
 - ***script/main.py***
 	Training segmentation model
