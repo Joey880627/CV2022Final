@@ -3,6 +3,9 @@ import numpy as np
 import cv2
 from tqdm import tqdm
 from utils import AverageMeter
+# Object for prediction
+from predict import Predictor
+predictor = Predictor()
 
 
 def true_negative_curve(confs: np.ndarray, labels: np.ndarray, nr_thresholds: int = 1000):
@@ -76,8 +79,12 @@ def benchmark(dataset_path: str, subjects: list):
                 label = cv2.imread(label_name)
                 # TODO: Modify the code below to run your method or load your results from disk
                 # output, conf = my_awesome_algorithm(image)
-                output = label
-                conf = 1.0
+                # output = label
+                # conf = 1.0
+
+                # Predict function
+                output, conf = predictor.predict(image_name)
+                
                 if np.sum(label.flatten()) > 0:
                     label_validity.append(1.0)
                     iou = mask_iou(output, label)
