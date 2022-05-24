@@ -84,7 +84,7 @@ def benchmark(dataset_path: str, subjects: list):
 
                 # Predict function
                 output, conf = predictor.predict(image_name)
-                
+
                 if np.sum(label.flatten()) > 0:
                     label_validity.append(1.0)
                     iou = mask_iou(output, label)
@@ -109,3 +109,15 @@ if __name__ == '__main__':
     dataset_path = '../dataset/public'
     subjects = ['S1', 'S2', 'S3', 'S4']
     benchmark(dataset_path, subjects)
+    """benchmark(dataset_path, ['S1'])
+    print("S1 results")
+    print("================================")
+    benchmark(dataset_path, ['S2'])
+    print("S2 results")
+    print("================================")
+    benchmark(dataset_path, ['S3'])
+    print("S3 results")
+    print("================================")
+    benchmark(dataset_path, ['S4'])
+    print("S4 results")
+    print("================================")"""

@@ -40,7 +40,7 @@ if __name__ == '__main__':
     import cv2
     import matplotlib
     import matplotlib.pyplot as plt
-    dataset_path = r'D:\CV22S_Ganzin_final_project\dataset\public\S1\01'
+    dataset_path = "../dataset/public/S1/01"
     nr_image = len([name for name in os.listdir(dataset_path) if name.endswith('.jpg')])
     print(nr_image)
     image = cv2.imread(os.path.join(dataset_path, '0.jpg'))

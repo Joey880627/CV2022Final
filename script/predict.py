@@ -7,7 +7,7 @@ device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cp
 THRESHOLD = 0.005
 
 class Predictor:
-    def __init__(self, model_path="model1.pth"):
+    def __init__(self, model_path="model14.pth"):
         self.model = get_model().to(device)
         self.model.load_state_dict(torch.load(model_path))
         self.model.eval()

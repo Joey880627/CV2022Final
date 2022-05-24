@@ -10,8 +10,8 @@ from model import get_model
 from loss import cross_entropy2d
 
 dataset_path = '../dataset/public'
-train_subjects = ['S1']
-valid_subjects = ['S2']
+train_subjects = ['S1', 'S4']
+valid_subjects = ['S3']
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 batch_size = 8
 lr = 0.001
@@ -78,4 +78,4 @@ if __name__ == "__main__":
         if valid_acc > best_valid_acc:
             best_valid_acc = valid_acc
             print("Saving model")
-            torch.save(model.state_dict(), "model1.pth")
+            torch.save(model.state_dict(), "model14.pth")
