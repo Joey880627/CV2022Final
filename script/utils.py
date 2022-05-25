@@ -42,7 +42,7 @@ if __name__ == '__main__':
     # Object for prediction
     from predict import predict
     use_label = False
-    dataset_path = "../dataset/public/S4/01"
+    dataset_path = "../dataset/public/S5/01"
     nr_image = len([name for name in os.listdir(dataset_path) if name.endswith('.jpg')])
     print(nr_image)
     image = cv2.imread(os.path.join(dataset_path, '0.jpg'))
@@ -58,7 +58,7 @@ if __name__ == '__main__':
         if use_label:
             label = cv2.imread(label_name)
         else:
-            label, _ = predict(image_name)
+            label, _ = predict(image)
             zeros = np.zeros_like(label)
             label = np.stack((label, zeros, label), axis=-1) * 255
         blended = alpha_blend(image, label, 0.5)

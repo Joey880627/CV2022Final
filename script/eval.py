@@ -80,7 +80,7 @@ def benchmark(dataset_path: str, subjects: list):
                 # conf = 1.0
 
                 # Predict function
-                output, conf = predict(image_name)
+                output, conf = predict(image)
 
                 if np.sum(label.flatten()) > 0:
                     label_validity.append(1.0)
@@ -142,7 +142,7 @@ def benchmark_all(dataset_path: str, subjects: list):
                 # conf = 1.0
 
                 # Predict function
-                output, conf = predict(image_name)
+                output, conf = predict(image)
 
                 if np.sum(label.flatten()) > 0:
                     label_validity.append(1.0)
@@ -182,5 +182,5 @@ def benchmark_all(dataset_path: str, subjects: list):
 
 if __name__ == '__main__':
     dataset_path = '../dataset/public'
-    subjects = ['S1', 'S2', 'S3', 'S4']
+    subjects = ['S1', 'S2']
     benchmark_all(dataset_path, subjects)

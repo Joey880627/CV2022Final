@@ -48,6 +48,8 @@ python3 main.py
 + ***script/loss.py***
 	+ Implement loss functions and evaluation metrics
 + ***script/predict.py***
-	+ Predicting function for eval.py
+	+ Deep learning predicting function for eval.py
++ ***script/predict_cv.py***
+	+ Classical CV predicting function for eval.py
 + ***script/modelXYZ.pth***
 	+ Model weights trained by data SX, SY, SZ

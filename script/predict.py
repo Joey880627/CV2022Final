@@ -12,9 +12,13 @@ model.load_state_dict(torch.load(model_path))
 model.eval()
 
 @torch.no_grad()
-def predict(image_name):
-    image = np.asarray(Image.open(image_name))
-    image = np.expand_dims(image, 2)
+def predict(image):
+    # image = np.asarray(Image.open(image_name))
+    # image = np.expand_dims(image, 2)
+    if len(image.shape)==2:
+        image = np.expand_dims(image, 2)
+    elif image.shape[2]==3:
+        image = image[..., :1]
     transform = transforms.Compose([
                 transforms.ToTensor(),
                 transforms.Normalize([0.5], [0.5]),])
