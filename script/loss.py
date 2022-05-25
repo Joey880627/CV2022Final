@@ -1,5 +1,7 @@
 import torch
 import torch.nn.functional as F
+from catalyst.contrib.losses import IoULoss
+from segmentation_models_pytorch.losses import JaccardLoss
 
 def cross_entropy2d(input, target, weight=None, size_average=True):
     # input: (n, c, h, w), target: (n, h, w)

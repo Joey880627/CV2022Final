@@ -37,6 +37,7 @@ python3 main.py
 2. Deal with imbalance data (e.g. focal loss, dice loss, etc.)
 3. Add CV preprocessed mask into input
 4. Add image augmentation (albumentation library)
+5. Test-time augmentation might be useful too
 
 ## Files
 + ***script/main.py***

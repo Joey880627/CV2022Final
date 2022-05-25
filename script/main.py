@@ -16,7 +16,7 @@ device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cp
 batch_size = 8
 lr = 0.001
 epochs = 5
-loss_type = "ce" # ("ce", "weighted_ce", "dice")
+loss_type = "iou" # ("ce", "weighted_ce", "dice", "iou")
 
 seed = 0
 np.random.seed(seed)
@@ -31,6 +31,8 @@ if __name__ == "__main__":
     
     model = get_model().to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
+    if loss_type == "iou":
+        iouLoss = JaccardLoss(mode= "multiclass", classes=[1])
 
     best_valid_iou = 0.0
     for epoch in range(epochs):
@@ -53,6 +55,8 @@ if __name__ == "__main__":
                 loss = cross_entropy2d(out, label, weight=torch.Tensor([1, 10]))
             elif loss_type == "dice":
                 loss = dice_loss(out, label)
+            elif loss_type == "iou":
+                loss = iouLoss(out, label)
             loss.backward()
             optimizer.step()
             _, pred = torch.max(out.data, 1)
@@ -83,6 +87,8 @@ if __name__ == "__main__":
                     loss = cross_entropy2d(out, label, weight=torch.Tensor([1, 10]))
                 elif loss_type == "dice":
                     loss = dice_loss(out, label)
+                elif loss_type == "iou":
+                    loss = iouLoss(out, label)
                 _, pred = torch.max(out.data, 1)
                 acc = pred.eq(label.data).cpu().sum() / np.prod(label.shape)
                 iou = binary_iou(pred, label)
