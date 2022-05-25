@@ -36,6 +36,7 @@ python3 main.py
 1. Let the model predict confidence score
 2. Deal with imbalance data (e.g. focal loss, dice loss, etc.)
 3. Add CV preprocessed mask into input
+4. Add image augmentation (albumentation library)
 
 ## Files
 + ***script/main.py***

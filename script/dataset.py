@@ -12,7 +12,6 @@ subjects = ['S1', 'S2', 'S3', 'S4']
 def get_data(dataset_path, subjects):
     images = [] # Raw images
     labels = [] # Masks of pupil
-    # labels_validity = [] # 1 if eye open, else 0
     for subject in subjects:
         for action_number in range(26):
             image_folder = os.path.join(dataset_path, subject, f'{action_number + 1:02d}')
@@ -25,14 +24,6 @@ def get_data(dataset_path, subjects):
                 label_name = os.path.join(image_folder, f'{idx}.png')
                 images.append(image_name)
                 labels.append(label_name)
-                """image = cv2.imread(image_name)
-                label = cv2.imread(label_name)
-                images.append(image)
-                labels.append(label)
-                if np.sum(label.flatten()) > 0:
-                    labels_validity.append(1.0)
-                else:  # empty ground truth label
-                    labels_validity.append(0.0)"""
     return images, labels
 
 class PupilDataset(Dataset):
@@ -49,7 +40,6 @@ class PupilDataset(Dataset):
         label = np.asarray(Image.open(self.labels[item]).convert('RGB'))
 
         label = (label.sum(axis=-1) > 0).astype(np.int64)
-        # label = np.expand_dims(label, 0)
         label_validity = float(np.sum(label.flatten()) > 0)
         image = self.transform(image)
         return image, label, label_validity

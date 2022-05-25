@@ -15,7 +15,7 @@ valid_subjects = ['S4']
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 batch_size = 8
 lr = 0.001
-epochs = 3
+epochs = 5
 loss_type = "ce" # ("ce", "weighted_ce", "dice")
 
 seed = 0
