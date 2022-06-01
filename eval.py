@@ -173,7 +173,7 @@ def benchmark_all(dataset_path: str, subjects: list):
     if len(label_validity_all) == 0:
         return
     
-    for subject in subjects:
+    for subject in list(wiou_dict.keys()):
         print('================================')
         print(f'{subject} overall weighted IoU: {wiou_dict[subject]:.4f}')
         print(f'{subject} average true negative rate: {atnr_dict[subject]:.4f}')
