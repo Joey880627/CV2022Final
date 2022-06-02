@@ -21,7 +21,6 @@ print(model_path)
 @torch.no_grad()
 def predict(image):
     # image = np.asarray(Image.open(image_name))
-    # image = np.expand_dims(image, 2)
     if len(image.shape)==3:
         image = image[..., 0]
     # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)

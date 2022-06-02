@@ -74,7 +74,7 @@ def benchmark(dataset_path: str, subjects: list):
                 image_name = os.path.join(image_folder, f'{idx}.jpg')
                 label_name = os.path.join(image_folder, f'{idx}.png')
                 image = np.asarray(Image.open(image_name))
-                label = np.asarray(Image.open(label_name))
+                label = np.asarray(Image.open(label_name).convert('RGB'))
                 # TODO: Modify the code below to run your method or load your results from disk
                 # output, conf = my_awesome_algorithm(image)
                 # output = label
@@ -147,7 +147,7 @@ def benchmark_all(dataset_path: str, subjects: list):
                     continue
 
                 label_name = os.path.join(image_folder, f'{idx}.png')
-                label = np.asarray(Image.open(label_name))
+                label = np.asarray(Image.open(label_name).convert('RGB'))
                 if np.sum(label.flatten()) > 0:
                     label_validity.append(1.0)
                     label_validity_all.append(1.0)
@@ -159,6 +159,7 @@ def benchmark_all(dataset_path: str, subjects: list):
                     label_validity_all.append(0.0)
                 output_conf.append(conf)
                 output_conf_all.append(conf)
+            print(iou_meter.avg())
         
         if len(label_validity) == 0:
             continue
@@ -193,5 +194,5 @@ def benchmark_all(dataset_path: str, subjects: list):
 
 if __name__ == '__main__':
     dataset_path = '../dataset/public'
-    subjects = ['S1','S5']
+    subjects = ['S1', 'S5']
     benchmark_all(dataset_path, subjects)
