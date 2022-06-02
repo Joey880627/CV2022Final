@@ -31,8 +31,8 @@ def predict_cv(image):
     # print(np.average(image))
 
     # cv2.imshow('ori_image',ori_image)
-
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    if len(image.shape)==3:
+        image = image[..., 0]
     image[:80,:] = 125
 
     image = cv2.equalizeHist(image)

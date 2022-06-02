@@ -22,10 +22,8 @@ print(model_path)
 def predict(image):
     # image = np.asarray(Image.open(image_name))
     # image = np.expand_dims(image, 2)
-    if len(image.shape)==2:
-        image = np.expand_dims(image, 2)
-    elif image.shape[2]==3:
-        image = image[..., :1]
+    if len(image.shape)==3:
+        image = image[..., 0]
     # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     image = data_preprocess(image)
     transform = transforms.Compose([
