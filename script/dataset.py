@@ -7,7 +7,7 @@ from torchvision import transforms
 from PIL import Image
 
 dataset_path = '../dataset/public'
-subjects = ['S1', 'S2', 'S3', 'S4']
+subjects = ['S4']
 
 def get_data(dataset_path, subjects):
     images = [] # Raw images
@@ -80,7 +80,7 @@ def get_dataset(dataset_path, subjects, split_ratio = 0.8):
     train_label = all_labels[:x] 
     val_label = all_labels[x:]
 
-    print(len(train_image),len(train_label),len(val_image),len(val_label))
+    print(f"Training data: {len(train_image)}, validation data: {len(val_image)}")
 
     return PupilDataset(train_image, train_label),PupilDataset(val_image, val_label)
 
