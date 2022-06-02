@@ -25,16 +25,14 @@ from predict import predict,generate_output_file
 
 def predict_cv(image):
     ori_image = image.copy()
-    h,w,ch = image.shape
+    h,w = image.shape[0], image.shape[1]
     prediction = np.zeros(shape=(h,w))
-
     # print(np.average(image))
 
     # cv2.imshow('ori_image',ori_image)
     if len(image.shape)==3:
-        image = np.expand_dims(image, axis=2)
-    elif image.shape[2]==3:
-        image = image[..., :1]
+        image = image[..., 0]
+    
     image[:80,:] = 125
 
     image = cv2.equalizeHist(image)
