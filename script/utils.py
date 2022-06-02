@@ -46,7 +46,7 @@ if __name__ == '__main__':
     dataset_path = "../dataset/public/S5/01"
     nr_image = len([name for name in os.listdir(dataset_path) if name.endswith('.jpg')])
     print(nr_image)
-    image = label = np.asarray(Image.open(os.path.join(dataset_path, '0.jpg')))
+    image = np.asarray(Image.open(os.path.join(dataset_path, '0.jpg')))
     h = image.shape[0]
     w = image.shape[1]
     dpi = matplotlib.rcParams['figure.dpi']
