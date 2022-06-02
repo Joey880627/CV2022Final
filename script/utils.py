@@ -57,7 +57,7 @@ if __name__ == '__main__':
         label_name = os.path.join(dataset_path, f'{idx}.png')
         image = np.asarray(Image.open(image_name))
         if use_label:
-            label = np.asarray(Image.open(label_name))
+            label = np.asarray(Image.open(label_name).convert('RGB'))
         else:
             label, _ = predict(image)
             zeros = np.zeros_like(label)
