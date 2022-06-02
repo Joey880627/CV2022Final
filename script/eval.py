@@ -159,7 +159,6 @@ def benchmark_all(dataset_path: str, subjects: list):
                     label_validity_all.append(0.0)
                 output_conf.append(conf)
                 output_conf_all.append(conf)
-            print(iou_meter.avg())
         
         if len(label_validity) == 0:
             continue
