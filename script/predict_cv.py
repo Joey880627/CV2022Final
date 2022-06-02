@@ -32,7 +32,9 @@ def predict_cv(image):
 
     # cv2.imshow('ori_image',ori_image)
     if len(image.shape)==3:
-        image = image[..., 0]
+        image = np.expand_dims(image, axis=2)
+    elif image.shape[2]==3:
+        image = image[..., :1]
     image[:80,:] = 125
 
     image = cv2.equalizeHist(image)
