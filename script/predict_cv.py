@@ -6,21 +6,6 @@ import matplotlib
 from utils import alpha_blend
 from predict import predict,generate_output_file
 
-# def generate_output_file(label,conf,action_number,image_number):
-#     folder_name = f'./S5_solution/{action_number:02d}/'
-#     if not os.path.exists(folder_name):
-#         os.makedirs(folder_name)
-    
-#     filename = f'{image_number}.png'
-#     cv2.imwrite(os.path.join(folder_name,filename),label)
-
-
-#     conf_file_path = os.path.join(folder_name,'conf.txt')
-
-#     mode = 'a' if os.path.exists(conf_file_path) else 'w'
-#     with open(conf_file_path, mode) as f:
-#         f.write(f'{conf}\n')
-    
 
 
 def predict_cv(image):
@@ -84,10 +69,12 @@ def predict_cv(image):
     return prediction, confidence
 
 
-
+# resnet18.pth:
+# OK : 26 04 05 06 08 09 10 11 12 13
+# NO : 01 02 03 07 
 
 if __name__ == '__main__':
-    dataset_path = r'..\dataset\public\S1\26'
+    dataset_path = r'..\dataset\public\S5\13'
     nr_image = len([name for name in os.listdir(dataset_path) if name.endswith('.jpg')])
     print('number of image:',nr_image)
     image = cv2.imread(os.path.join(dataset_path, '0.jpg'))
