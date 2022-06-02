@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import cv2
+from PIL import Image
 from tqdm import tqdm
 from utils import AverageMeter
 # Object for prediction
@@ -72,8 +73,8 @@ def benchmark(dataset_path: str, subjects: list):
             for idx in tqdm(range(nr_image), desc=f'[{sequence_idx:03d}] {image_folder}'):
                 image_name = os.path.join(image_folder, f'{idx}.jpg')
                 label_name = os.path.join(image_folder, f'{idx}.png')
-                image = cv2.imread(image_name)
-                label = cv2.imread(label_name)
+                image = np.asarray(Image.open(image_name))
+                label = np.asarray(Image.open(label_name))
                 # TODO: Modify the code below to run your method or load your results from disk
                 # output, conf = my_awesome_algorithm(image)
                 # output = label
@@ -133,7 +134,7 @@ def benchmark_all(dataset_path: str, subjects: list):
                 # continue
             for idx in tqdm(range(nr_image), desc=f'[{sequence_idx:03d}] {image_folder}'):
                 image_name = os.path.join(image_folder, f'{idx}.jpg')
-                image = cv2.imread(image_name)
+                image = np.asarray(Image.open(image_name))
                 # TODO: Modify the code below to run your method or load your results from disk
                 # Predict function
                 output, conf = predict(image)
@@ -146,7 +147,7 @@ def benchmark_all(dataset_path: str, subjects: list):
                     continue
 
                 label_name = os.path.join(image_folder, f'{idx}.png')
-                label = cv2.imread(label_name)
+                label = np.asarray(Image.open(label_name))
                 if np.sum(label.flatten()) > 0:
                     label_validity.append(1.0)
                     label_validity_all.append(1.0)

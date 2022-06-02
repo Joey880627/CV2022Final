@@ -1,4 +1,5 @@
 import numpy as np
+from PIL import Image
 
 
 def alpha_blend(input_image: np.ndarray, segmentation_mask: np.ndarray, alpha: float = 0.5):
@@ -45,7 +46,7 @@ if __name__ == '__main__':
     dataset_path = "../dataset/public/S5/01"
     nr_image = len([name for name in os.listdir(dataset_path) if name.endswith('.jpg')])
     print(nr_image)
-    image = cv2.imread(os.path.join(dataset_path, '0.jpg'))
+    image = label = np.asarray(Image.open(os.path.join(dataset_path, '0.jpg')))
     h = image.shape[0]
     w = image.shape[1]
     dpi = matplotlib.rcParams['figure.dpi']
@@ -54,9 +55,9 @@ if __name__ == '__main__':
     for idx in range(nr_image):
         image_name = os.path.join(dataset_path, f'{idx}.jpg')
         label_name = os.path.join(dataset_path, f'{idx}.png')
-        image = cv2.imread(image_name)
+        image = np.asarray(Image.open(image_name))
         if use_label:
-            label = cv2.imread(label_name)
+            label = np.asarray(Image.open(label_name))
         else:
             label, _ = predict(image)
             zeros = np.zeros_like(label)
