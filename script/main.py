@@ -10,7 +10,7 @@ from model import get_model
 from loss import *
 
 dataset_path = '../dataset/public'
-train_subjects = ['S1', 'S2','S3']
+train_subjects = ['S1', 'S2','S3', 'S4']
 valid_subjects = ['S1']
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 batch_size = 8
@@ -21,7 +21,7 @@ loss_type = "ce" # ("ce", "weighted_ce", "dice", "iou")
 pretrain = False
 model_path="model1_.pth"
 
-save_model_path = "resnet18_123.pth"
+save_model_path = "resnet18_1234_2channel.pth"
 
 seed = 0
 np.random.seed(seed)
