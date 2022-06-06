@@ -7,7 +7,7 @@ from torchvision import transforms
 from PIL import Image
 
 dataset_path = '../dataset/public'
-subjects = ['S4']
+subjects = ['S1', 'S2', 'S3', 'S4']
 
 def get_data(dataset_path, subjects):
     images = [] # Raw images
@@ -55,7 +55,7 @@ class PupilDataset(Dataset):
         label = np.asarray(Image.open(self.labels[item]).convert('RGB'))
 
         label = (label.sum(axis=-1) > 0).astype(np.int64)
-        label_validity = float(np.sum(label.flatten()) > 0)
+        label_validity = int(np.sum(label.flatten()) > 0)
         image = self.transform(image)
         return image, label, label_validity
 
@@ -87,9 +87,17 @@ def get_dataset(dataset_path, subjects, split_ratio = 0.8):
 if __name__ == "__main__":
     # images, labels = get_data(dataset_path, subjects)
     # dataset = PupilDataset(images, labels)
-    dataset,val_set = get_dataset(dataset_path, subjects)
-    dataloader = DataLoader(dataset, batch_size=8, shuffle=False)
-    for image, label, label_validity in dataloader:
+    dataset, val_set = get_dataset(dataset_path, subjects, split_ratio=0.95)
+    dataloader = DataLoader(dataset, batch_size=32, shuffle=False)
+    ones = 0
+    """for image, label, label_validity in dataloader:
         print(image.shape, label.shape, label_validity.shape)
         print(image.max(), image.min())
         break
+        print(label_validity)
+        lv.append(label_validity.numpy())"""
+    print(len(dataset))
+    from tqdm import tqdm
+    for image, label, label_validity in tqdm(dataloader):
+        ones += label_validity.sum().item()
+    print(ones)

@@ -1,4 +1,5 @@
 import torch
+import torch.nn.functional as F
 from torchvision import transforms
 import numpy as np
 from PIL import Image
@@ -30,13 +31,14 @@ def predict(image):
                 transforms.Normalize([0.5], [0.5]),])
     image = transform(image).to(device)
     image = image.unsqueeze(0)
-    out = model(image)
+    out, cls_out = model(image)
     _, pred = torch.max(out.data, 1)
     pred = pred[0].cpu().numpy()
     pred = pred*255
     pred = reserve_largest_component(pred)
-    area = np.count_nonzero(pred) / np.prod(pred.shape)
-    conf = float(area > THRESHOLD)
+    # area = np.count_nonzero(pred) / np.prod(pred.shape)
+    # conf = float(area > THRESHOLD)
+    conf = F.softmax(cls_out)[0][1].item()
     return pred, conf
 
 def reserve_largest_component(image):

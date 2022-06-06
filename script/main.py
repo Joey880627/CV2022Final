@@ -21,7 +21,7 @@ loss_type = "ce" # ("ce", "weighted_ce", "dice", "iou")
 pretrain = False
 model_path="model1_.pth"
 
-save_model_path = "resnet18_1234_2channel.pth"
+save_model_path = "resnet18_1234_2channel_classifier.pth"
 
 seed = 0
 np.random.seed(seed)
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     optimizer = optim.Adam(model.parameters(), lr=lr)
     if loss_type == "iou":
         iouLoss = JaccardLoss(mode= "multiclass", classes=[1])
-
+    cls_criterion = nn.CrossEntropyLoss(weight=torch.Tensor([10., 1.])).to(device)
     best_valid_iou = 0.0
     for epoch in range(epochs):
         train_loss = 0.0
@@ -54,21 +54,24 @@ if __name__ == "__main__":
             label_validity = label_validity.to(device)
             bsz = image.shape[0]
 
-            out = model(image)
+            out, cls_out = model(image)
             optimizer.zero_grad()
             if loss_type == "ce":
-                loss = cross_entropy2d(out, label)
+                seg_loss = cross_entropy2d(out, label)
             elif loss_type == "weighted_ce":
-                loss = cross_entropy2d(out, label, weight=torch.Tensor([1, 10]))
+                seg_loss = cross_entropy2d(out, label, weight=torch.Tensor([1, 10]))
             elif loss_type == "dice":
-                loss = dice_loss(out, label)
+                seg_loss = dice_loss(out, label)
             elif loss_type == "iou":
-                loss = iouLoss(out, label)
+                seg_loss = iouLoss(out, label)
+            cls_loss = cls_criterion(cls_out, label_validity)
+            loss = seg_loss + cls_loss
             loss.backward()
             optimizer.step()
-            _, pred = torch.max(out.data, 1)
-            acc = pred.eq(label.data).cpu().sum() / np.prod(label.shape)
-            iou = binary_iou(pred, label)
+            _, seg_pred = torch.max(out.data, 1)
+            _, pred = torch.max(cls_out.data, 1)
+            acc = pred.eq(label_validity.data).cpu().sum() / np.prod(label_validity.shape)
+            iou = binary_iou(seg_pred, label)
             train_loss += loss.item() * bsz
             train_acc += acc.item() * bsz
             train_iou += iou.item() * bsz
@@ -86,18 +89,21 @@ if __name__ == "__main__":
                 label = label.to(device)
                 label_validity = label_validity.to(device)
                 bsz = image.shape[0]
-                out = model(image)
+                out, cls_out = model(image)
                 if loss_type == "ce":
-                    loss = cross_entropy2d(out, label)
+                    seg_loss = cross_entropy2d(out, label)
                 elif loss_type == "weighted_ce":
-                    loss = cross_entropy2d(out, label, weight=torch.Tensor([1, 10]))
+                    seg_loss = cross_entropy2d(out, label, weight=torch.Tensor([1, 10]))
                 elif loss_type == "dice":
-                    loss = dice_loss(out, label)
+                    seg_loss = dice_loss(out, label)
                 elif loss_type == "iou":
-                    loss = iouLoss(out, label)
-                _, pred = torch.max(out.data, 1)
-                acc = pred.eq(label.data).cpu().sum() / np.prod(label.shape)
-                iou = binary_iou(pred, label)
+                    seg_loss = iouLoss(out, label)
+                cls_loss = cls_criterion(cls_out, label_validity)
+                loss = seg_loss + cls_loss
+                _, seg_pred = torch.max(out.data, 1)
+                _, pred = torch.max(cls_out.data, 1)
+                acc = pred.eq(label_validity.data).cpu().sum() / np.prod(label_validity.shape)
+                iou = binary_iou(seg_pred, label)
                 valid_loss += loss.item() * bsz
                 valid_acc += acc.item() * bsz
                 valid_iou += iou.item() * bsz
