@@ -57,12 +57,15 @@ if __name__ == '__main__':
         label_name = os.path.join(dataset_path, f'{idx}.png')
         image = np.asarray(Image.open(image_name))
         if use_label:
-            label = np.asarray(Image.open(label_name))
+            label = np.asarray(Image.open(label_name).convert('RGB'))
+            conf = int(np.sum(label.flatten()) > 0)
         else:
-            label, _ = predict(image)
+            label, conf = predict(image)
             zeros = np.zeros_like(label)
             label = np.stack((label, zeros, label), axis=-1) * 255
         blended = alpha_blend(image, label, 0.5)
+        cv2.putText(blended, f"Confidence: {conf:.03f}", (20, 30), cv2.FONT_HERSHEY_SIMPLEX,
+  1, (0, 255, 255), 1, cv2.LINE_AA)
         ax.clear()
         ax.imshow(blended)
         ax.axis('off')
