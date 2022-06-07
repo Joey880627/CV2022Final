@@ -29,11 +29,10 @@ def get_data(dataset_path, subjects):
 
 def data_preprocess(image):
     hist = cv2.equalizeHist(image)
-    # canny = cv2.Canny(hist, 15, 150)
-    # blur = cv2.blur(hist, (5, 5))
-    # laplacian = cv2.Laplacian(blur,cv2.CV_64F)
-    _, threshold = cv2.threshold(hist, 27, 255, cv2.THRESH_BINARY_INV)
-    image = np.stack([hist,threshold],axis = 2)
+    canny = cv2.Canny(hist, 15, 150)
+    blur = cv2.blur(hist, (5, 5))
+    laplacian = cv2.Laplacian(blur,cv2.CV_64F)
+    image = np.stack([hist,canny,laplacian],axis = 2)
     return image.astype(np.float32)
 
 class PupilDataset(Dataset):
@@ -41,12 +40,9 @@ class PupilDataset(Dataset):
         self.images = images
         self.labels = labels
         self.mode = mode
-        # self.transform = transforms.Compose([
-        #                 transforms.ToTensor(),
-        #                 transforms.Normalize([0.5], [0.5]),])
         self.transform = transforms.Compose([
                         transforms.ToTensor(),
-                        transforms.Normalize([0.5,0.5], [0.5,0.5]),])
+                        transforms.Normalize([0.5], [0.5]),])
     def __getitem__(self, item):
         image = np.asarray(Image.open(self.images[item]))
         # image = np.expand_dims(image, 2)

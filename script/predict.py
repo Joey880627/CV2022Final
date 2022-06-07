@@ -12,7 +12,7 @@ import os
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 THRESHOLD = 500/(640*480)
 
-model_path="resnet18.pth"
+model_path="resnet18_1234_classifier.pth"
 model = get_model().to(device)
 model.load_state_dict(torch.load(model_path))
 model.eval()
@@ -38,7 +38,7 @@ def predict(image):
     pred = reserve_largest_component(pred)
     # area = np.count_nonzero(pred) / np.prod(pred.shape)
     # conf = float(area > THRESHOLD)
-    conf = F.softmax(cls_out)[0][1].item()
+    conf = F.softmax(cls_out, dim=1)[0][1].item()
     return pred, conf
 
 def reserve_largest_component(image):

@@ -21,7 +21,7 @@ loss_type = "ce" # ("ce", "weighted_ce", "dice", "iou")
 pretrain = False
 model_path="model1_.pth"
 
-save_model_path = "resnet18_1234_2channel_classifier.pth"
+save_model_path = "resnet18_1234_classifier.pth"
 
 seed = 0
 np.random.seed(seed)

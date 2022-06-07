@@ -193,5 +193,5 @@ def benchmark_all(dataset_path: str, subjects: list):
 
 if __name__ == '__main__':
     dataset_path = '../dataset/public'
-    subjects = ['S1', 'S5']
+    subjects = ['S5']
     benchmark_all(dataset_path, subjects)
