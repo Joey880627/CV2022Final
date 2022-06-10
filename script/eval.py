@@ -138,6 +138,10 @@ def benchmark_all(dataset_path: str, subjects: list):
                 # Predict function
                 output, conf = predict(image)
 
+                # label_name = os.path.join(image_folder, f'{idx}.png')
+                # output = cv2.imread(label_name)
+                # conf = 1.0 if np.sum(output.flatten()) > 0 else 0.0
+
                 # generate output file to submit
                 if subject == 'S5':
                     generate_output_file(output,conf,action_number+1,idx)
@@ -192,5 +196,5 @@ def benchmark_all(dataset_path: str, subjects: list):
 
 if __name__ == '__main__':
     dataset_path = '../dataset/public'
-    subjects = ['S1','S5']
+    subjects = ['S5']
     benchmark_all(dataset_path, subjects)

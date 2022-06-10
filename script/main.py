@@ -10,18 +10,18 @@ from model import get_model
 from loss import *
 
 dataset_path = '../dataset/public'
-train_subjects = ['S1', 'S2','S3']
+train_subjects = ['S5']
 valid_subjects = ['S1']
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-batch_size = 8
-lr = 0.001
-epochs = 5
-loss_type = "ce" # ("ce", "weighted_ce", "dice", "iou")
+batch_size = 2
+lr = 0.0005
+epochs = 10
+loss_type = "dice" # ("ce", "weighted_ce", "dice", "iou")
 
-pretrain = False
-model_path="model1_.pth"
+pretrain = True
+model_path="resnet18_boos.pth"
 
-save_model_path = "resnet18_123.pth"
+save_model_path = "resnet18_boos.pth"
 
 seed = 0
 np.random.seed(seed)
@@ -115,5 +115,7 @@ if __name__ == "__main__":
             best_valid_iou = valid_iou
             print("Saving model")
             torch.save(model.state_dict(), save_model_path)
-        '''print("Saving model")
-        torch.save(model.state_dict(), save_model_path)'''
+        
+        # print("Saving model")
+        # torch.save(model.state_dict(), save_model_path)
+        
